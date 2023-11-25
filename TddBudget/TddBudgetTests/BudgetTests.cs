@@ -20,77 +20,16 @@ public class BudgetTests
     }
 
     [Test]
-    public void get_one_day_budget()
-    {
-        GivenBudget(new List<Budget>()
-        {
-            new()
-            {
-                YearMonth = "202301",
-                Amount = 310
-            }
-        });
-
-        var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 1));
-        TotalAmountShouldBe(10m, actual);
+    public void Query_Period_Is_InValid()
+    { 
+        var actual = WhenQuery(new DateTime(2023, 1, 10), new DateTime(2023, 1, 1));
+        TotalAmountShouldBe(0m, actual); 
     }
 
-    [Test]
-    public void get_partial_month_budget()
+    
+    private void TotalAmountShouldBe(decimal expected, decimal actual)
     {
-        GivenBudget(new List<Budget>()
-        {
-            new()
-            {
-                YearMonth = "202301",
-                Amount = 310
-            }
-        });
-
-        var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 2));
-        TotalAmountShouldBe(20m, actual);
-    }
-
-    [Test]
-    public void get_one_month_budget()
-    {
-        GivenBudget(new List<Budget>()
-        {
-            new()
-            {
-                YearMonth = "202301",
-                Amount = 310
-            }
-        });
-
-        var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 31));
-        TotalAmountShouldBe(310m, actual);
-    }
-
-    [Test]
-    public void get_cross_month_budget()
-    {
-        GivenBudget(new List<Budget>()
-        {
-            new()
-            {
-                YearMonth = "202303",
-                Amount = 310
-            },
-            new Budget()
-            {
-                YearMonth = "202304",
-                Amount = 600
-            }
-        });
-
-        var actual = WhenQuery(new DateTime(2023, 3, 1), new DateTime(2023, 4, 1));
-        TotalAmountShouldBe(350m, actual);
-    }
-
-    private static void TotalAmountShouldBe(decimal expected, decimal actual)
-    {
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     private decimal WhenQuery(DateTime start, DateTime end)

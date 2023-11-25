@@ -7,10 +7,28 @@ public class Budget
 
     public decimal GetOneDayAmount()
     {
-        var year = int.Parse(YearMonth.Substring(0, 4));
-        var month = int.Parse(YearMonth.Substring(4, 2));
+        return Amount / DateTime.DaysInMonth(GetYear(), GetMonth());
+    }
 
-        var daysInMonth = DateTime.DaysInMonth(year, month);
-        return Amount / daysInMonth;
+    public bool IsInQueryPeriod(DateTime start, DateTime end)
+    {
+        if (DateTime.TryParseExact(YearMonth, "yyyyMM",
+                System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None,
+                out var yearMonth))
+        {
+            return yearMonth >= start && yearMonth <= end;
+        }
+
+        return false;
+    }
+
+    private int GetMonth()
+    {
+        return int.Parse(YearMonth.Substring(4, 2));
+    }
+
+    private int GetYear()
+    {
+        return int.Parse(YearMonth.Substring(0, 4));
     }
 }

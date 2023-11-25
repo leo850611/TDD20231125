@@ -29,7 +29,7 @@ public class BudgetService
             };
 
             var budget = budgets.First(x => x.YearMonth == $"{startDate.Year}{startDate.Month:00}");
-            totalAmount += GetAmount(period, budget);
+            totalAmount += budget.GetAmountByPeriod(period);
             startDate = lastDateInStartMonth.AddDays(1);
         }
 
@@ -40,15 +40,5 @@ public class BudgetService
     {
         return new DateTime(startDate.Year, startDate.Month,
             DateTime.DaysInMonth(startDate.Year, startDate.Month));
-    }
-
-    private decimal GetAmount(Period period, Budget budget)
-    {
-        var start = period.StartDate;
-        var end = period.EndDate;
-
-        var totalDays = (decimal) (end - start).TotalDays + 1;
-        var oneDayAmount = budget.GetOneDayAmount();
-        return totalDays * oneDayAmount;
     }
 }

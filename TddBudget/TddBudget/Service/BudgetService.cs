@@ -20,7 +20,7 @@ public class BudgetService
         var startDate = start;
         while (startDate <= end)
         {
-            var lastDateInStartMonth = GetLastDateByDate(startDate);
+            var lastDateInStartMonth = GetLastDateOfMonth(startDate);
             var period = new Period
             {
                 StartDate = startDate,
@@ -29,13 +29,13 @@ public class BudgetService
 
             var budget = budgets.FirstOrDefault(x => x.YearMonth == $"{startDate.Year}{startDate.Month:00}");
             totalAmount += budget?.GetAmountByPeriod(period) ?? 0;
-            startDate = lastDateInStartMonth.AddDays(1);
+            startDate = period.EndDate.AddDays(1);
         }
 
         return totalAmount;
     }
 
-    private static DateTime GetLastDateByDate(DateTime startDate)
+    private static DateTime GetLastDateOfMonth(DateTime startDate)
     {
         return new DateTime(startDate.Year, startDate.Month,
             DateTime.DaysInMonth(startDate.Year, startDate.Month));

@@ -7,12 +7,8 @@ public class Budget
 
     public decimal GetAmountByPeriod(Period period)
     {
-        var start = period.StartDate;
-        var end = period.EndDate;
-
-        var totalDays = (decimal) (end - start).TotalDays + 1;
-        var oneDayAmount = GetOneDayAmount();
-        return totalDays * oneDayAmount;
+        var totalDays = (decimal) (period.EndDate - period.StartDate).TotalDays + 1;
+        return GetOneDayAmount() * totalDays;
     }
 
     private decimal GetOneDayAmount()
@@ -21,6 +17,6 @@ public class Budget
         var month = int.Parse(YearMonth.Substring(4, 2));
 
         var daysInMonth = DateTime.DaysInMonth(year, month);
-        return Amount / daysInMonth;
+        return Amount / (decimal) daysInMonth;
     }
 }

@@ -1,4 +1,5 @@
 using NSubstitute;
+using NUnit.Framework.Internal;
 using TddBudget.Interface;
 using TddBudget.Model;
 using TddBudget.Service;
@@ -32,6 +33,22 @@ public class BudgetTests
 
         var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 1));
         TotalAmountShouldBe(10m, actual);
+    }
+    
+    [Test]
+    public void get_cross_day_budget()
+    {
+        GivenBudget(new List<Budget>()
+        {
+            new()
+            {
+                YearMonth = "202301",
+                Amount = 310
+            }
+        });
+
+        var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 2));
+        TotalAmountShouldBe(20m, actual);
     }
 
     private static void TotalAmountShouldBe(decimal expected, decimal actual)

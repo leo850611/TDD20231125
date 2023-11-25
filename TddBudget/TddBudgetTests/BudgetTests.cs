@@ -98,9 +98,9 @@ public class BudgetTests
                 YearMonth = "202305"
             },
         });
-    
+
         var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 5, 15));
-        // 3月 -> 620 + 4月 -> 900 + 5月 -> 15*30(450) = 1350 + 620 = 1970
+        
         TotalAmountShouldBe(1970m, actual);
     }
 

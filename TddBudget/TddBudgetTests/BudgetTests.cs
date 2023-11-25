@@ -31,10 +31,10 @@ public class BudgetTests
         });
 
         var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 1));
-        TotalAmountShouldBe(10, actual);
+        TotalAmountShouldBe(10m, actual);
     }
 
-    private static void TotalAmountShouldBe(int expected, decimal actual)
+    private static void TotalAmountShouldBe(decimal expected, decimal actual)
     {
         Assert.AreEqual(expected, actual);
     }

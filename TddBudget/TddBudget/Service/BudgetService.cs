@@ -22,8 +22,13 @@ public class BudgetService
         while (startDate <= endDate)
         {
             var lastDateInStartMonth = GetLastDateByDate(startDate);
-            totalAmount += GetAmount(startDate, lastDateInStartMonth < endDate ? lastDateInStartMonth : endDate, budgets);
-
+            var period = new Period
+            {
+                StartDate = startDate,
+                EndDate = lastDateInStartMonth < endDate ? lastDateInStartMonth : endDate
+            };
+            
+            totalAmount += GetAmount(period, budgets);
             startDate = lastDateInStartMonth.AddDays(1);
         }
 
@@ -36,8 +41,11 @@ public class BudgetService
             DateTime.DaysInMonth(startDate.Year, startDate.Month));
     }
 
-    private decimal GetAmount(DateTime start, DateTime end, IEnumerable<Budget> budgets)
+    private decimal GetAmount(Period period, IEnumerable<Budget> budgets)
     {
+        var start = period.StartDate;
+        var end = period.EndDate;
+        
         var budget = budgets.First(x => x.YearMonth == $"{start.Year}{start.Month:00}");
         var totalDays = (decimal) (end - start).TotalDays + 1;
         var oneDayAmount = budget.GetOneDayAmount();

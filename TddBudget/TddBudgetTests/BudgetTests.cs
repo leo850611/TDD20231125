@@ -68,7 +68,7 @@ public class BudgetTests
     }
 
     [Test]
-    public void get_cross_month_budget()
+    public void get_cross_one_month_budget()
     {
         GivenBudget(new List<Budget>()
         {
@@ -85,7 +85,7 @@ public class BudgetTests
         });
 
         var actual = WhenQuery(new DateTime(2023, 3, 1), new DateTime(2023, 4, 1));
-        TotalAmountShouldBe(350m, actual);
+        TotalAmountShouldBe(330m, actual);
     }
 
     private static void TotalAmountShouldBe(decimal expected, decimal actual)

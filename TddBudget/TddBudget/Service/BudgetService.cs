@@ -18,14 +18,13 @@ public class BudgetService
         var totalAmount = 0m;
 
         var startDate = start;
-        var endDate = end;
-        while (startDate <= endDate)
+        while (startDate <= end)
         {
             var lastDateInStartMonth = GetLastDateByDate(startDate);
             var period = new Period
             {
                 StartDate = startDate,
-                EndDate = lastDateInStartMonth < endDate ? lastDateInStartMonth : endDate
+                EndDate = lastDateInStartMonth < end ? lastDateInStartMonth : end
             };
 
             var budget = budgets.First(x => x.YearMonth == $"{startDate.Year}{startDate.Month:00}");

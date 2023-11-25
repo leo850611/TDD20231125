@@ -27,8 +27,8 @@ public class BudgetService
                 EndDate = lastDateInStartMonth < end ? lastDateInStartMonth : end
             };
 
-            var budget = budgets.First(x => x.YearMonth == $"{startDate.Year}{startDate.Month:00}");
-            totalAmount += budget.GetAmountByPeriod(period);
+            var budget = budgets.FirstOrDefault(x => x.YearMonth == $"{startDate.Year}{startDate.Month:00}");
+            totalAmount += budget?.GetAmountByPeriod(period) ?? 0;
             startDate = lastDateInStartMonth.AddDays(1);
         }
 

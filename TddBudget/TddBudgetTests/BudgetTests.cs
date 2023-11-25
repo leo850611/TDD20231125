@@ -114,6 +114,27 @@ public class BudgetTests
     }
 
     [Test]
+    public void get_cross_two_month_but_one_month_is_0_budget()
+    {
+        GivenBudget(new List<Budget>()
+        {
+            new()
+            {
+                YearMonth = "202303",
+                Amount = 310
+            },
+            new()
+            {
+                YearMonth = "202305",
+                Amount = 3100
+            }
+        });
+
+        var actual = WhenQuery(new DateTime(2023, 3, 30), new DateTime(2023, 5, 1));
+        TotalAmountShouldBe(20m + 100m, actual);
+    }
+
+    [Test]
     public void get_cross_year_budget()
     {
         GivenBudget(new List<Budget>()

@@ -34,7 +34,7 @@ public class BudgetTests
         var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 1));
         TotalAmountShouldBe(10m, actual);
     }
-    
+
     [Test]
     public void get_partial_month_budget()
     {
@@ -66,7 +66,7 @@ public class BudgetTests
         var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 31));
         TotalAmountShouldBe(310m, actual);
     }
-    
+
     [Test]
     public void get_cross_month_budget()
     {
@@ -85,9 +85,9 @@ public class BudgetTests
         });
 
         var actual = WhenQuery(new DateTime(2023, 3, 1), new DateTime(2023, 4, 1));
-        TotalAmountShouldBe(330m, actual);
+        TotalAmountShouldBe(350m, actual);
     }
-    
+
     private static void TotalAmountShouldBe(decimal expected, decimal actual)
     {
         Assert.AreEqual(expected, actual);

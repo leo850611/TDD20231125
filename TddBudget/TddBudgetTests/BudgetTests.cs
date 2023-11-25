@@ -77,6 +77,33 @@ public class BudgetTests
         TotalAmountShouldBe(300m, actual);
     }
 
+    [Test]
+    public void Query_Period_With_Cross_Month_Of_Budget()
+    {
+        GivenAllBudget(new List<Budget>()
+        {
+            new()
+            {
+                Amount = 620,
+                YearMonth = "202303"
+            },
+            new()
+            {
+                Amount = 900,
+                YearMonth = "202304"
+            },
+            new()
+            {
+                Amount = 930,
+                YearMonth = "202305"
+            },
+        });
+    
+        var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 5, 15));
+        // 3月 -> 620 + 4月 -> 900 + 5月 -> 15*30(450) = 1350 + 620 = 1970
+        TotalAmountShouldBe(1970m, actual);
+    }
+
 
     private void GivenAllBudget(List<Budget> budgets)
     {

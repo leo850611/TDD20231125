@@ -19,34 +19,42 @@ public class BudgetService
             return 0m;
         }
 
-        var budgets = GetInPeriodBudgets(start, end).ToList();
+        var budgets = GetInPeriodBudgets(start, end);
 
         if (!budgets.Any())
         {
             return 0m;
         }
         
-        if (IsSameYearMonth(start, end))
+        if (start.ToString("yyyyMM") == end.ToString("yyyyMM"))
         {
-            var budget = budgets.First(x => x.YearMonth == $"{start.Year}{start.Month:00}");
-            var totalDays = (decimal) (end - start).TotalDays + 1;
-            var oneDayAmount = budget.GetOneDayAmount();
-            return totalDays * oneDayAmount;
+            var budget = budgets.Find(x => x.IsSameYearMonth(start));
+            return ((decimal) (end - start).TotalDays + 1) * budget!.GetAverageAmountByEveryDay();
         }
-        else
+
+        var totalAmount = 0m;
+        foreach (var budget in budgets)
         {
-            return 100m;
+            if (budget.IsSameYearMonth(start))
+            {
+                totalAmount += ((decimal)(new DateTime(start.Year, start.Month, 31) - start).TotalDays + 1) * budget.GetAverageAmountByEveryDay();
+            }else if (budget.IsSameYearMonth(end))
+            {
+                totalAmount += ((decimal)(end - new DateTime(end.Year, end.Month, 1)).TotalDays +
+                                1) * budget.GetAverageAmountByEveryDay();
+            }
+            else
+            {
+               totalAmount += budget.Amount; 
+            }
         }
+
+        return totalAmount;
     }
 
-    private IEnumerable<Budget> GetInPeriodBudgets(DateTime start, DateTime end)
+    private List<Budget> GetInPeriodBudgets(DateTime start, DateTime end)
     {
-        return _budgetRepo.GetAll().Where(budget => budget.IsInQueryPeriod(start, end));
-    }
-    
-    private static bool IsSameYearMonth(DateTime start, DateTime end)
-    {
-        return start.ToString("yyyyMM") == end.ToString("yyyyMM");
+        return _budgetRepo.GetAll().Where(budget => budget.IsInPeriod(start, end)).ToList();
     }
 
     private bool IsInValidQueryPeriod(DateTime start, DateTime end)

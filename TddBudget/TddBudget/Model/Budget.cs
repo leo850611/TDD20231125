@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace TddBudget.Model;
 
 public class Budget
@@ -5,30 +7,25 @@ public class Budget
     public int Amount { get; set; }
     public string YearMonth { get; set; }
 
-    public decimal GetOneDayAmount()
+    public decimal GetAverageAmountByEveryDay()
     {
-        return Amount / DateTime.DaysInMonth(GetYear(), GetMonth());
+        var yearMonth = GetYearMonth();
+        return Amount / DateTime.DaysInMonth(yearMonth.Year, yearMonth.Month);;
+    }
+    
+    public bool IsInPeriod(DateTime start, DateTime end)
+    {
+        var yearMonth = GetYearMonth();
+        return yearMonth >= start && yearMonth <= end;
     }
 
-    public bool IsInQueryPeriod(DateTime start, DateTime end)
+    private DateTime GetYearMonth()
     {
-        if (DateTime.TryParseExact(YearMonth, "yyyyMM",
-                System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None,
-                out var yearMonth))
-        {
-            return yearMonth >= start && yearMonth <= end;
-        }
-
-        return false;
+        return DateTime.ParseExact(YearMonth, "yyyyMM", CultureInfo.InvariantCulture);
     }
 
-    private int GetMonth()
+    public bool IsSameYearMonth(DateTime start)
     {
-        return int.Parse(YearMonth.Substring(4, 2));
-    }
-
-    private int GetYear()
-    {
-        return int.Parse(YearMonth.Substring(0, 4));
+        return YearMonth == $"{start.Year}{start.Month:00}";
     }
 }

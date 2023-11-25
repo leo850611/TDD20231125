@@ -18,16 +18,6 @@ public class Budget
         return YearMonth == $"{start.Year}{start.Month:00}";
     }
 
-    public DateTime GetLastDayOfMonth()
-    {
-        return GetFirstDayOfMonth().AddMonths(1).AddDays(-1);
-    }
-
-    public DateTime GetFirstDayOfMonth()
-    {
-        return DateTime.ParseExact(YearMonth, "yyyyMM", CultureInfo.InvariantCulture);
-    }
-
     public bool IsInPeriod(DateTime start, DateTime end)
     {
         var firstDayOfMonth = GetFirstDayOfMonth();
@@ -36,5 +26,21 @@ public class Budget
         return (firstDayOfMonth >= start && firstDayOfMonth <= end)
                || (lastDayOfMonth >= start && lastDayOfMonth <= end)
                || (firstDayOfMonth <= start && lastDayOfMonth >= end);
+    }
+
+    private DateTime GetLastDayOfMonth()
+    {
+        return GetFirstDayOfMonth().AddMonths(1).AddDays(-1);
+    }
+
+    private DateTime GetFirstDayOfMonth()
+    {
+        var yearMonth = GetYearMonth();
+        return new DateTime(yearMonth.Year, yearMonth.Month, 1);
+    }
+
+    private DateTime GetYearMonth()
+    {
+        return DateTime.ParseExact(YearMonth, "yyyyMM", CultureInfo.InvariantCulture);
     }
 }

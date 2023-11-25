@@ -68,7 +68,7 @@ public class BudgetTests
     }
 
     [Test]
-    public void get_cross_one_month_budget()
+    public void get_cross_month_budget()
     {
         GivenBudget(new List<Budget>()
         {
@@ -77,7 +77,7 @@ public class BudgetTests
                 YearMonth = "202303",
                 Amount = 310
             },
-            new Budget()
+            new()
             {
                 YearMonth = "202304",
                 Amount = 600

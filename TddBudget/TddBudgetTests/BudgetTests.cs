@@ -134,6 +134,22 @@ public class BudgetTests
         TotalAmountShouldBe(20m + 500m, actual);
     }
 
+    [Test]
+    public void when_date_period_not_correct_should_get_0_budget()
+    {
+        GivenBudget(new List<Budget>()
+        {
+            new()
+            {
+                YearMonth = "202312",
+                Amount = 310
+            }
+        });
+
+        var actual = WhenQuery(new DateTime(2023, 12, 20), new DateTime(2023, 12, 5));
+        TotalAmountShouldBe(0m, actual);
+    }
+
     private static void TotalAmountShouldBe(decimal expected, decimal actual)
     {
         Assert.AreEqual(expected, actual);

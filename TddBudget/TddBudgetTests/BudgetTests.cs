@@ -36,7 +36,7 @@ public class BudgetTests
     }
     
     [Test]
-    public void get_cross_day_budget()
+    public void get_partial_month_budget()
     {
         GivenBudget(new List<Budget>()
         {
@@ -51,6 +51,22 @@ public class BudgetTests
         TotalAmountShouldBe(20m, actual);
     }
 
+    [Test]
+    public void get_one_month_budget()
+    {
+        GivenBudget(new List<Budget>()
+        {
+            new()
+            {
+                YearMonth = "202301",
+                Amount = 310
+            }
+        });
+
+        var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 31));
+        TotalAmountShouldBe(310m, actual);
+    }
+    
     private static void TotalAmountShouldBe(decimal expected, decimal actual)
     {
         Assert.AreEqual(expected, actual);

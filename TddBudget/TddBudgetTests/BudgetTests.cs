@@ -30,8 +30,18 @@ public class BudgetTests
             }
         });
 
-        var actual = _budgetService.Query(new DateTime(2023, 1, 1), new DateTime(2023, 1, 1));
-        Assert.AreEqual(10, actual);
+        var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 1, 1));
+        TotalAmountShouldBe(10, actual);
+    }
+
+    private static void TotalAmountShouldBe(int expected, decimal actual)
+    {
+        Assert.AreEqual(expected, actual);
+    }
+
+    private decimal WhenQuery(DateTime start, DateTime end)
+    {
+        return _budgetService.Query(start, end);
     }
 
     private void GivenBudget(List<Budget> budgets)

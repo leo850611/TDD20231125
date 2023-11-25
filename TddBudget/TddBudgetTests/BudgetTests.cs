@@ -27,7 +27,7 @@ public class BudgetTests
     }
 
     [Test]
-    public void Query_Period_Is_No_Any_Budget()
+    public void Query_Period_No_Any_Budget()
     {
         GivenAllBudget(new List<Budget>()
         {
@@ -44,7 +44,7 @@ public class BudgetTests
     }
 
     [Test]
-    public void Query_Period_With_One_Day_Of_Budget()
+    public void Query_Period_With_One_Day()
     {
         GivenAllBudget(new List<Budget>()
         {
@@ -55,13 +55,13 @@ public class BudgetTests
             }
         });
 
-        var actual = WhenQuery(new DateTime(2023, 4, 1), new DateTime(2023, 4, 1));
+        var actual = WhenQuery(new DateTime(2023, 4, 10), new DateTime(2023, 4, 10));
 
         TotalAmountShouldBe(20m, actual);
     }
 
     [Test]
-    public void Query_Period_With_Partial_Day_Of_Budget()
+    public void Query_Period_With_Partial_Day_Of_Month()
     {
         GivenAllBudget(new List<Budget>()
         {
@@ -78,7 +78,7 @@ public class BudgetTests
     }
 
     [Test]
-    public void Query_Period_With_Cross_Month_Of_Budget()
+    public void Query_Period_With_Cross_Month()
     {
         GivenAllBudget(new List<Budget>()
         {
@@ -100,12 +100,12 @@ public class BudgetTests
         });
 
         var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 5, 15));
-        
+
         TotalAmountShouldBe(1970m, actual);
     }
-    
+
     [Test]
-    public void Query_Period_With_Cross_Year_Of_Budget()
+    public void Query_Period_With_Cross_Year()
     {
         GivenAllBudget(new List<Budget>()
         {
@@ -127,8 +127,35 @@ public class BudgetTests
         });
 
         var actual = WhenQuery(new DateTime(2020, 1, 1), new DateTime(2023, 5, 15));
-        
+
         TotalAmountShouldBe(1970m, actual);
+    }
+
+    [Test]
+    public void Query_Period_With_Leap_Year()
+    {
+        GivenAllBudget(new List<Budget>()
+        {
+            new()
+            {
+                Amount = 580,
+                YearMonth = "201602"
+            },
+            new()
+            {
+                Amount = 900,
+                YearMonth = "202304"
+            },
+            new()
+            {
+                Amount = 930,
+                YearMonth = "202305"
+            },
+        });
+
+        var actual = WhenQuery(new DateTime(2016, 2, 28), new DateTime(2023, 5, 15));
+
+        TotalAmountShouldBe(1390m, actual);
     }
 
 

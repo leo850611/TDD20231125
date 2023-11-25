@@ -14,22 +14,22 @@ public class BudgetService
     
     public decimal Query(DateTime start, DateTime end)
     {
-        if (IsInValidQueryPeriod(start, end))
+        if (IsInValidPeriod(start, end))
         {
             return 0m;
         }
 
-        var budgets = GetInPeriodBudgets(start, end);
+        var budgets = GetBudgetsByPeriod(start, end);
 
         if (!budgets.Any())
         {
             return 0m;
         }
         
-        if (start.ToString("yyyyMM") == end.ToString("yyyyMM"))
+        if (IsSameYearMonth(start, end))
         {
             var budget = budgets.Find(x => x.IsSameYearMonth(start));
-            return ((decimal) (end - start).TotalDays + 1) * budget!.GetAverageAmountByEveryDay();
+            return GetDifferenceDays(start, end) * budget!.GetAverageAmountByEveryDay();
         }
 
         var totalAmount = 0m;
@@ -37,11 +37,10 @@ public class BudgetService
         {
             if (budget.IsSameYearMonth(start))
             {
-                totalAmount += ((decimal)(new DateTime(start.Year, start.Month, 31) - start).TotalDays + 1) * budget.GetAverageAmountByEveryDay();
+                totalAmount += GetDifferenceDays(start, new DateTime(start.Year, start.Month, DateTime.DaysInMonth(start.Year, start.Month))) * budget.GetAverageAmountByEveryDay();
             }else if (budget.IsSameYearMonth(end))
             {
-                totalAmount += ((decimal)(end - new DateTime(end.Year, end.Month, 1)).TotalDays +
-                                1) * budget.GetAverageAmountByEveryDay();
+                totalAmount +=  GetDifferenceDays(new DateTime(end.Year, end.Month, 1), end) * budget.GetAverageAmountByEveryDay();
             }
             else
             {
@@ -52,12 +51,22 @@ public class BudgetService
         return totalAmount;
     }
 
-    private List<Budget> GetInPeriodBudgets(DateTime start, DateTime end)
+    private decimal GetDifferenceDays(DateTime start, DateTime end)
+    {
+        return ((decimal) (end - start).TotalDays + 1);
+    }
+
+    private bool IsSameYearMonth(DateTime start, DateTime end)
+    {
+        return start.ToString("yyyyMM") == end.ToString("yyyyMM");
+    }
+
+    private List<Budget> GetBudgetsByPeriod(DateTime start, DateTime end)
     {
         return _budgetRepo.GetAll().Where(budget => budget.IsInPeriod(start, end)).ToList();
     }
 
-    private bool IsInValidQueryPeriod(DateTime start, DateTime end)
+    private bool IsInValidPeriod(DateTime start, DateTime end)
     {
         return start > end;
     }

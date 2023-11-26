@@ -17,27 +17,27 @@ public class BudgetService
         var budgets = _budgetRepo.GetAll();
         var totalAmount = 0m;
 
-        var startDate = start;
-        while (startDate <= end)
+        var current = start;
+        while (current <= end)
         {
-            var lastDateInStartMonth = GetLastDateOfMonth(startDate);
+            var lastDateInStartMonth = GetLastDateOfMonth(current);
             var period = new Period
             {
-                StartDate = startDate,
+                StartDate = current,
                 EndDate = lastDateInStartMonth < end ? lastDateInStartMonth : end
             };
 
-            var budget = budgets.FirstOrDefault(x => x.YearMonth == startDate.ToString("yyyyMM"));
+            var budget = budgets.FirstOrDefault(x => x.YearMonth == current.ToString("yyyyMM"));
             totalAmount += budget?.GetAmountByPeriod(period) ?? 0;
-            startDate = period.EndDate.AddDays(1);
+            current = period.EndDate.AddDays(1);
         }
 
         return totalAmount;
     }
 
-    private static DateTime GetLastDateOfMonth(DateTime startDate)
+    private static DateTime GetLastDateOfMonth(DateTime date)
     {
-        return new DateTime(startDate.Year, startDate.Month,
-            DateTime.DaysInMonth(startDate.Year, startDate.Month));
+        return new DateTime(date.Year, date.Month,
+            DateTime.DaysInMonth(date.Year, date.Month));
     }
 }

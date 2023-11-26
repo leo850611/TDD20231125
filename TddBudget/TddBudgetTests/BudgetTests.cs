@@ -98,12 +98,12 @@ public class BudgetTests
                 YearMonth = "202305"
             },
         });
-
+    
         var actual = WhenQuery(new DateTime(2023, 1, 1), new DateTime(2023, 5, 15));
-
+    
         TotalAmountShouldBe(1970m, actual);
     }
-
+    
     [Test]
     public void Query_Period_With_Cross_Year()
     {
@@ -125,12 +125,12 @@ public class BudgetTests
                 YearMonth = "202305"
             },
         });
-
+    
         var actual = WhenQuery(new DateTime(2020, 1, 1), new DateTime(2023, 5, 15));
-
+    
         TotalAmountShouldBe(1970m, actual);
     }
-
+    
     [Test]
     public void Query_Period_With_Leap_Year()
     {
@@ -152,13 +152,12 @@ public class BudgetTests
                 YearMonth = "202305"
             },
         });
-
+    
         var actual = WhenQuery(new DateTime(2016, 2, 28), new DateTime(2023, 5, 15));
-
+    
         TotalAmountShouldBe(1390m, actual);
     }
-
-
+    
     private void GivenAllBudget(List<Budget> budgets)
     {
         _budgetRepo.GetAll().Returns(budgets);

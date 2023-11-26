@@ -20,6 +20,7 @@ public class BudgetService
         var current = start;
         while (current <= end)
         {
+            // TODO : currentLastDateInMonth can use budget last day
             var currentLastDateInMonth = GetLastDateOfMonth(current);
             var period = new Period
             {
@@ -29,7 +30,7 @@ public class BudgetService
 
             var budget = budgets.FirstOrDefault(x => x.YearMonth == current.ToString("yyyyMM"));
             totalAmount += budget?.GetAmountByPeriod(period) ?? 0;
-            current = period.EndDate.AddDays(1);
+            current = currentLastDateInMonth.AddDays(1);
         }
 
         return totalAmount;

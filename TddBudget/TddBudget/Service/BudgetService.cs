@@ -13,15 +13,7 @@ public class BudgetService
     
     public decimal Query(DateTime start, DateTime end)
     {
-        if (IsInValidPeriod(start, end))
-        {
-            return 0m;
-        }
-
-        var sum = _budgetRepo.GetAll().Sum(b => b.GetAmount(start, end));
-        return sum;
-
-        
+        return IsInValidPeriod(start, end) ? 0m : _budgetRepo.GetAll().Sum(b => b.GetAmount(start, end));
     }
     
     private bool IsInValidPeriod(DateTime start, DateTime end)

@@ -17,16 +17,19 @@ public class Budget
             var differenceDays = GetDifferenceDays(start, end);
             return differenceDays * (Amount / DateTime.DaysInMonth(firstDayOfMonth.Year, firstDayOfMonth.Month));
         }
-        else if (start <= firstDayOfMonth && lastDayOfMonth <= end)
+
+        if (start <= firstDayOfMonth && lastDayOfMonth <= end)
         {
             return Amount;
         }
-        else if (start <= firstDayOfMonth && firstDayOfMonth <= end)
+
+        if (start <= firstDayOfMonth && firstDayOfMonth <= end)
         {
             var differenceDays = GetDifferenceDays(new DateTime(end.Year, end.Month, 1), end);
             return differenceDays * (Amount / DateTime.DaysInMonth(firstDayOfMonth.Year, firstDayOfMonth.Month));
         }
-        else if (start <= lastDayOfMonth && lastDayOfMonth <= end)
+
+        if (start <= lastDayOfMonth && lastDayOfMonth <= end)
         {
             var differenceDays = GetDifferenceDays(start,
                 new DateTime(start.Year, start.Month, DateTime.DaysInMonth(start.Year, start.Month)));

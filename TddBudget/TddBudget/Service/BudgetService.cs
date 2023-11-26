@@ -20,11 +20,11 @@ public class BudgetService
         var current = start;
         while (current <= end)
         {
-            var lastDateInStartMonth = GetLastDateOfMonth(current);
+            var currentLastDateInMonth = GetLastDateOfMonth(current);
             var period = new Period
             {
                 StartDate = current,
-                EndDate = lastDateInStartMonth < end ? lastDateInStartMonth : end
+                EndDate = currentLastDateInMonth < end ? currentLastDateInMonth : end
             };
 
             var budget = budgets.FirstOrDefault(x => x.YearMonth == current.ToString("yyyyMM"));

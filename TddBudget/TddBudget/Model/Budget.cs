@@ -13,10 +13,8 @@ public class Budget
 
     private decimal GetOneDayAmount()
     {
-        var year = int.Parse(YearMonth.Substring(0, 4));
-        var month = int.Parse(YearMonth.Substring(4, 2));
-
-        var daysInMonth = DateTime.DaysInMonth(year, month);
+        var firstDate = DateTime.ParseExact(YearMonth, "yyyyMM", null);
+        var daysInMonth = DateTime.DaysInMonth(firstDate.Year, firstDate.Month);
         return Amount / (decimal) daysInMonth;
     }
 }
